@@ -12,6 +12,7 @@ c.execute("""CREATE TABLE IF NOT EXISTS employees (
             detail TEXT
             )""")
 
+position_dict = {"1":"manager", "2":"developer", "3":"intern"}
 
 def show(query):
     listing = c.execute(query)
@@ -41,7 +42,6 @@ def getRemovalInfo(position):
 def remove_emp(fname, lname, position):
     with conn:
         c.execute("DELETE FROM employees WHERE first = :first AND last = :last AND position = :position", {"first":fname, "last":lname, "position":position})
-
 
 while True:
     print("\nWelcome to Company R")
@@ -78,8 +78,7 @@ while True:
                 break
             else:
                 print("Invalid option.\n")
-                
-                 
+                             
     elif option == "2":
         print("---ADDING MODE---")
         print("1 - Add a manager")
@@ -89,23 +88,19 @@ while True:
         addOption = input()
         while True:
             if addOption == "1" or addOption == "2" or addOption == "3" or addOption == "4":
+                position = position_dict[addOption]
+                fname, lname, pay = getInfo(position)
                 if addOption == "1":
-                    position = "manager"
-                    fname, lname, pay = getInfo(position)
                     detail = int(input("Enter manager's office ID: "))
                     new_manager = Manager(fname, lname, pay, detail)
                     insert_emp(new_manager, position, "Office ID = {}".format(detail))
 
                 elif addOption == "2":
-                    position = "developer"
-                    fname, lname, pay = getInfo(position)
                     detail = input("Enter the developer's primary programming language: ")
                     new_developer = Developer(fname, lname, pay, detail)
                     insert_emp(new_developer, position, "Primary programming language = {}".format(detail))
                 
                 elif addOption == "3":
-                    position = "intern"
-                    fname, lname, pay = getInfo(position)
                     detail = input("Enter the intern's school: ")
                     new_intern = Intern(fname, lname, pay, detail)
                     insert_emp(new_intern, position, "School = {}".format(detail))
@@ -115,8 +110,7 @@ while True:
             else:
                 print("Invalid option.\n")
             break
-            
-        
+                 
     elif option == "3":
         print("---REMOVING MODE---")  
         print("1 - Remove a manager")
@@ -126,20 +120,12 @@ while True:
         removeOption = input()
         while True:
             if removeOption == "1" or removeOption == "2" or removeOption == "3" or removeOption == "4":
-                if removeOption == "1":
-                    position = "manager"
-                elif removeOption == "2":
-                    position = "developer"
-                elif removeOption == "3":
-                    position = "intern"
-                elif removeOption == "4":
+                position = position_dict[removeOption]
+                fname, lname = getRemovalInfo(position)
+                if removeOption == "4":
                     print("Returning to previous menu...\n")
                     break
-                fname, lname = getRemovalInfo(position)
                 remove_emp(fname, lname, position)
                 break
-
-                   
-        
     else:
         print("Invalid option.\n")
