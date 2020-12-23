@@ -16,13 +16,17 @@ position_dict = {"1":"manager", "2":"developer", "3":"intern"}
 
 def show(query):
     listing = c.execute(query)
-    for element in listing:
-        fullname = element[0] + " " + element[1]
-        print("Name: %s" %fullname)
-        print("Email: %s" %element[2])
-        print("Pay: %d" %element[3])
-        print("Position: %s"%element[4])
-        print("Detail: %s\n"%element[5])
+    search_results = listing.fetchall()
+    if len(search_results) < 1:
+        print("Currently none\n")
+    else:
+        for element in search_results:
+            fullname = element[0] + " " + element[1]
+            print("Name: %s" %fullname)
+            print("Email: %s" %element[2])
+            print("Pay: $%d" %element[3])
+            print("Position: %s"%element[4])
+            print("Detail: %s\n"%element[5])
 
 def getInfo(position):
     fname = input("Enter the {}'s first name: ".format(position))
@@ -34,7 +38,7 @@ def insert_emp(emp, position, detail):
     with conn:
         c.execute("INSERT INTO employees VALUES(:first, :last, :email, :pay, :position, :detail)", {'first':emp.first, 'last':emp.last, "email":emp.email, 'pay':emp.pay, "position":position, "detail":detail})
 
-def getRemovalInfo(position):
+def getUpdateRemovalInfo(position):
     fname = input("Enter the {}'s first name: ".format(position))
     lname = input("Enter the {}'s last name: ".format(position))
     return fname, lname
@@ -43,13 +47,19 @@ def remove_emp(fname, lname, position):
     with conn:
         c.execute("DELETE FROM employees WHERE first = :first AND last = :last AND position = :position", {"first":fname, "last":lname, "position":position})
 
+def update_pay(fname, lname, position, pay):
+    with conn:
+        c.execute("UPDATE employees SET pay = :pay WHERE first = :first AND last = :last AND position = :position", {'pay': pay, 'first': fname, 'last':lname, "position":position})
+        
+
 while True:
-    print("\nWelcome to Company R")
+    print("\nWelcome to the Employment Management System")
     print("\n---MAIN MENU---\n")
     print("Choose an option:")
     print("1 - View list of employees")
     print("2 - Add an employee")
     print("3 - Remove an employee")
+    print("4 - Update pay")
     option = input()
     if option == "1":
         while True:
@@ -121,11 +131,30 @@ while True:
         while True:
             if removeOption == "1" or removeOption == "2" or removeOption == "3" or removeOption == "4":
                 position = position_dict[removeOption]
-                fname, lname = getRemovalInfo(position)
+                fname, lname = getUpdateRemovalInfo(position)
                 if removeOption == "4":
                     print("Returning to previous menu...\n")
                     break
                 remove_emp(fname, lname, position)
                 break
+    elif option == "4":
+        print("---UPDATE PAY MODE---")
+        print("1 - Update pay of a manager")
+        print("2 - Update pay of a developer")
+        print("3 - Update pay of an intern")
+        print("4 - Go back to previous menu")
+        updateOption = input()
+        while True:
+            if updateOption == "1" or updateOption == "2" or updateOption == "3" or updateOption == "4":
+                position = position_dict[updateOption]
+                fname, lname = getUpdateRemovalInfo(position)
+                if updateOption == "4":
+                    print("Returning to previous menu...\n")
+                    break
+                new_pay = int(input("Enter new pay: "))
+                update_pay(fname, lname, position, new_pay)
+                break
+            else:
+                print("Invalid option.\n")
     else:
         print("Invalid option.\n")

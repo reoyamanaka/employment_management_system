@@ -12,7 +12,7 @@ class Employee:
 
     @property
     def email(self):
-        return "{}.{}{}@companyR.com".format(self.first, self.last, random.randint(0, 999))
+        return "{}.{}{}@calmestcoder.com".format(self.first, self.last, random.randint(0, 999))
 
     def __repr__(self):
         return "{}, {}, {}".format(self.first, self.last, self.pay)
