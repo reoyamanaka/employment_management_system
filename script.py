@@ -12,6 +12,7 @@ c.execute("""CREATE TABLE IF NOT EXISTS employees (
             detail TEXT
             )""")
 
+
 def show(query):
     listing = c.execute(query)
     for element in listing:
@@ -32,7 +33,14 @@ def insert_emp(emp, position, detail):
     with conn:
         c.execute("INSERT INTO employees VALUES(:first, :last, :email, :pay, :position, :detail)", {'first':emp.first, 'last':emp.last, "email":emp.email, 'pay':emp.pay, "position":position, "detail":detail})
 
+def getRemovalInfo(position):
+    fname = input("Enter the {}'s first name: ".format(position))
+    lname = input("Enter the {}'s last name: ".format(position))
+    return fname, lname
 
+def remove_emp(fname, lname, position):
+    with conn:
+        c.execute("DELETE FROM employees WHERE first = :first AND last = :last AND position = :position", {"first":fname, "last":lname, "position":position})
 
 
 while True:
@@ -69,7 +77,7 @@ while True:
                 print("Returning to main menu...\n")
                 break
             else:
-                print("Invalid option.")
+                print("Invalid option.\n")
                 
                  
     elif option == "2":
@@ -80,26 +88,34 @@ while True:
         print("4 - Go back to previous menu")
         addOption = input()
         while True:
-            if addOption == "1":
-                position = "manager"
-                fname, lname, pay = getInfo(position)
-                detail = int(input("Enter manager's office ID: "))
-                new_manager = Manager(fname, lname, pay, detail)
-                insert_emp(new_manager, position, "Office ID = {}".format(detail))
-                break
+            if addOption == "1" or addOption == "2" or addOption == "3" or addOption == "4":
+                if addOption == "1":
+                    position = "manager"
+                    fname, lname, pay = getInfo(position)
+                    detail = int(input("Enter manager's office ID: "))
+                    new_manager = Manager(fname, lname, pay, detail)
+                    insert_emp(new_manager, position, "Office ID = {}".format(detail))
 
-            elif addOption == "2":
-                position = "developer"
-                detail = input("Enter the developer's primary programming language: ")
-            elif addOption == "3":
-                position = "intern"
-                detail = input("Enter the intern's school: ")
+                elif addOption == "2":
+                    position = "developer"
+                    fname, lname, pay = getInfo(position)
+                    detail = input("Enter the developer's primary programming language: ")
+                    new_developer = Developer(fname, lname, pay, detail)
+                    insert_emp(new_developer, position, "Primary programming language = {}".format(detail))
+                
+                elif addOption == "3":
+                    position = "intern"
+                    fname, lname, pay = getInfo(position)
+                    detail = input("Enter the intern's school: ")
+                    new_intern = Intern(fname, lname, pay, detail)
+                    insert_emp(new_intern, position, "School = {}".format(detail))
+                
+                elif addOption == "4":
+                    print("Returning to previous menu...\n")
+            else:
+                print("Invalid option.\n")
+            break
             
-
-            
-            if addOption == "4":
-                print("Returning to previous menu...")
-                break
         
     elif option == "3":
         print("---REMOVING MODE---")  
@@ -108,6 +124,22 @@ while True:
         print("3 - Remove an intern")
         print("4 - Go back to previous menu")
         removeOption = input()
+        while True:
+            if removeOption == "1" or removeOption == "2" or removeOption == "3" or removeOption == "4":
+                if removeOption == "1":
+                    position = "manager"
+                elif removeOption == "2":
+                    position = "developer"
+                elif removeOption == "3":
+                    position = "intern"
+                elif removeOption == "4":
+                    print("Returning to previous menu...\n")
+                    break
+                fname, lname = getRemovalInfo(position)
+                remove_emp(fname, lname, position)
+                break
+
+                   
         
     else:
-        print("Invalid option.")
+        print("Invalid option.\n")
