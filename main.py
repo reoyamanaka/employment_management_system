@@ -60,6 +60,7 @@ while True:
     print("2 - Add an employee")
     print("3 - Remove an employee")
     print("4 - Update pay")
+    print("5 - Exit")
     option = input()
     if option == "1":
         while True:
@@ -156,5 +157,8 @@ while True:
                 break
             else:
                 print("Invalid option.\n")
+    elif option == "5":
+        print("Exiting...\n")
+        break
     else:
         print("Invalid option.\n")
