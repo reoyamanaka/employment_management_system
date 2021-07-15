@@ -46,8 +46,6 @@
 ### Built With
 
 * Python 3.8.1
-* IDLE 3.8.1
-* macOS High Sierra Version 10.13.6
 
 ## Getting Started
 
@@ -69,7 +67,7 @@ git clone https://github.com/reoyamanaka/employment_management_system.git
 <div align="center">
   <strong>YouTube Demo</strong><br>
   <a href="https://youtu.be/Fbn39S_3wMo" target="_blank">
-    <img src="http://i3.ytimg.com/vi/Fbn39S_3wMo/hqdefault.jpg" alt="Thumbnail" width="560" height="315">
+    <img src="http://i3.ytimg.com/vi/Fbn39S_3wMo/hqdefault.jpg" alt="Thumbnail">
   </a>
 </div>
 
