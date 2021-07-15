@@ -40,7 +40,7 @@
 
 ## About The Project
 <p align="center">
-  <img src="images/employment_management.png" width="400" height="211">
+  <img src="images/employment_management.png">
 </p>
 
 ### Built With
